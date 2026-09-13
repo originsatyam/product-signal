@@ -1,12 +1,17 @@
 {
   "name": "product-signal",
-  "workspaces": ["frontend", "backend"], 
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
   "scripts": {
+    "dev": "concurrently --kill-others -n \"FRONTEND,BACKEND\" -c \"blue.bold,magenta.bold\" \"npm run dev-frontend\" \"npm run dev-backend\"",
     "dev-frontend": "npm run dev --prefix frontend",
     "dev-backend": "npm run dev --prefix backend",
-    "dev": "npx --yes concurrently \"npm run dev-frontend\" \"npm run dev-backend\""
+    "build": "npm run build --prefix frontend"
   },
   "devDependencies": {
-    "concurrently": "latest"
+    "concurrently": "^9.1.2"
   }
 }

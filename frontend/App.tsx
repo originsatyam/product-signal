@@ -15,16 +15,16 @@ const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewState>('overview');
   const [activeThemeId, setActiveThemeId] = useState<string | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  
+
   // Data State
   const [allFeedback, setAllFeedback] = useState<FeedbackItem[]>(mockFeedback);
   const [themes, setThemes] = useState<Theme[]>(mockThemes);
   const [opportunities, setOpportunities] = useState<Opportunity[]>(mockOpportunities);
 
   // Derived State
-  const activeTheme = useMemo(() => 
+  const activeTheme = useMemo(() =>
     themes.find(t => t.id === activeThemeId) || null
-  , [themes, activeThemeId]);
+    , [themes, activeThemeId]);
 
   const activeThemeFeedback = useMemo(() => {
     if (!activeTheme) return [];
@@ -85,20 +85,20 @@ const App: React.FC = () => {
   };
 
   const handleUpdateOpportunityStatus = (id: string, status: Opportunity['status']) => {
-    setOpportunities(prev => 
+    setOpportunities(prev =>
       prev.map(opp => opp.id === id ? { ...opp, status } : opp)
     );
   };
 
   return (
     <div className="flex h-screen bg-slate-50 overflow-hidden font-sans selection:bg-primary-100 selection:text-primary-900">
-      <Sidebar 
-        currentView={currentView} 
-        onNavigate={handleNavigate} 
+      <Sidebar
+        currentView={currentView}
+        onNavigate={handleNavigate}
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
       />
-      
+
       <div className="flex-1 flex flex-col h-full overflow-hidden relative">
         {/* Mobile Header */}
         <header className="md:hidden bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between flex-shrink-0 z-20">
@@ -108,7 +108,7 @@ const App: React.FC = () => {
             </div>
             <span className="font-semibold text-slate-900 tracking-tight">Product Signal</span>
           </div>
-          <button 
+          <button
             onClick={() => setIsSidebarOpen(true)}
             className="p-2 -mr-2 text-slate-600 hover:bg-slate-100 rounded-md transition-colors focus-ring"
             aria-label="Open menu"
@@ -121,18 +121,18 @@ const App: React.FC = () => {
           {currentView === 'import' && (
             <ImportView onProcessComplete={handleProcessComplete} />
           )}
-          
+
           {currentView === 'overview' && (
             <OverviewView themes={themes} onViewTheme={handleViewTheme} />
           )}
-          
+
           {currentView === 'insights' && (
             <InsightsView themes={themes} onViewTheme={handleViewTheme} />
           )}
-          
+
           {currentView === 'evidence' && activeTheme && (
-            <EvidenceView 
-              theme={activeTheme} 
+            <EvidenceView
+              theme={activeTheme}
               feedbackItems={activeThemeFeedback}
               onBack={() => handleNavigate('insights')}
               onCreateOpportunity={handleCreateOpportunity}
@@ -141,8 +141,8 @@ const App: React.FC = () => {
           )}
 
           {currentView === 'opportunity' && (
-            <OpportunityView 
-              opportunities={opportunities} 
+            <OpportunityView
+              opportunities={opportunities}
               themes={themes}
               onUpdateStatus={handleUpdateOpportunityStatus}
             />

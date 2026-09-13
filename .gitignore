@@ -11,6 +11,8 @@ node_modules/
 .env.production.local
 backend/.env.local
 frontend/.env.local
+.agents/
+figma mcp.json
 
 # Production Build Outputs
 dist/
@@ -37,3 +39,5 @@ scratch/
 # Local Dev Caches
 .vite/
 frontend/node_modules/.vite/
+
+.vercel

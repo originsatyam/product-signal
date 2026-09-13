@@ -1,0 +1,26 @@
+Review Number,Rating,Source,Title,Review
+1,1,Support,Onboarding Complexity,The workspace setup process is confusing—I spent 30 minutes trying to figure out how to invite my design team.
+2,2,Support,Permissions Setup Delay,Why is setting up initial permissions so complicated? We couldn't assign workspace roles without contacting customer support.
+3,1,Survey,Unclear Terminology,Our team got stuck during onboarding because workspace terminology isn't clearly explained in the setup wizard.
+4,2,Review,Inviting Stakeholders Issues,Inviting external stakeholders took forever—the invitation link kept expiring during initial setup.
+5,3,Interview,Walkthrough Length,The new user walkthrough is too long and doesn't explain how to set up primary project boards clearly.
+6,2,Support,Initial Configuration Friction,Took me over 25 minutes just to configure our initial department workspace and invite teammates.
+7,1,Review,PDF Export Corruption,Exporting reports to PDF completely corrupts table formatting and cuts off summary charts.
+8,1,Support,Chart Label Overlap,When I try to export monthly analytics to SVG or PDF, chart labels overlap and look completely unreadable.
+9,2,Survey,Executive Export Need,We need high-resolution PDF exports for executive board meetings, but the current export tool fails.
+10,1,Review,CSV Header Loss,Exporting CSV data strips out column headers, making raw data exports unusable for spreadsheet analysis.
+11,1,Support,PDF Generator Crash,The PDF generator crashes whenever I try to export a dataset with more than 50 rows of customer feedback.
+12,2,Review,Client Deliverable Formatting,Formatting breaks completely whenever we export figures and charts for client-facing deliverables.
+13,2,Review,Dashboard Loading Speed,The dashboard takes over 10 seconds to load when filtering large customer feedback datasets.
+14,2,Support,Dataset Freeze on Query,Running analytics on datasets over 10000 rows causes the application to freeze and stutter.
+15,3,Survey,Mobile Browser Lag,Extremely slow performance on mobile web browsers when viewing real-time metric charts during field research.
+16,2,Review,Peak Hour Slowdown,Page load speeds drop significantly during peak morning hours when multiple team members view metrics.
+17,3,Support,Table Scroll Stutter,The user interface stutters and drops frames when scrolling through large data table views.
+18,2,Survey,Query Filter Latency,Filter operations take 8 to 12 seconds to compute on complex feedback queries.
+19,2,Support,Sparse API Documentation,The API documentation is missing examples for python script wrappers and custom webhook endpoints.
+20,2,Review,API Rate Limit Errors,We keep hitting strict API rate limits when syncing customer telemetry data from our external server.
+21,1,Support,Vague API Error Payload,API error messages are vague—I spent 2 days debugging a status 400 response because payload requirements weren't documented.
+22,2,Survey,Webhook Payload Drop,Custom webhook notifications drop payload attributes during high-volume webhook event spikes.
+23,3,Interview,Auth Token Refresh Guidance,Developer documentation lacks clear API authentication examples for token refresh and session handling.
+24,3,Support,Missing API Sandbox,No sandbox environment is provided for testing webhook payload integrations safely before going live.
+25,2,Review,REST API Sync Timeout,Syncing historical data over the REST API times out without returning clear retry headers.

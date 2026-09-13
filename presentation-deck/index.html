@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Signal — AI UX Design Case Study</title>
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        },
+                        dark: {
+                            800: '#111827',
+                            900: '#0b0f17',
+                            950: '#06090f',
+                        }
+                    },
+                    boxShadow: {
+                        'glow': '0 0 35px -5px rgba(59, 130, 246, 0.25)',
+                        'glow-emerald': '0 0 35px -5px rgba(16, 185, 129, 0.25)',
+                        'glow-purple': '0 0 35px -5px rgba(168, 85, 247, 0.25)',
+                        'card': '0 4px 20px -2px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.06)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            background-color: #06090f;
+            color: #f3f4f6;
+            user-select: none;
+            -webkit-font-smoothing: antialiased;
+            letter-spacing: 0.012em;
+        }
+
+        h1, h2 {
+            letter-spacing: -0.025em;
+        }
+
+        p, span, div, li, a, button {
+            letter-spacing: 0.015em;
+        }
+
+        .uppercase-tag {
+            letter-spacing: 0.08em;
+        }
+
+        /* Slide Transitions & Motion Animations */
+        .slide-container {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .slide-container.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Staggered Motion Animations */
+        .animate-item-1, .animate-item-2, .animate-item-3, .animate-item-4 {
+            opacity: 0;
+            transform: translateY(14px);
+        }
+
+        .slide-container.active .animate-item-1 {
+            animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 0.05s;
+        }
+
+        .slide-container.active .animate-item-2 {
+            animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 0.15s;
+        }
+
+        .slide-container.active .animate-item-3 {
+            animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 0.25s;
+        }
+
+        .slide-container.active .animate-item-4 {
+            animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 0.35s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(14px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Minimal UI Components */
+        .minimal-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .minimal-card-hover:hover {
+            background: rgba(30, 41, 59, 0.7);
+            border-color: rgba(59, 130, 246, 0.35);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px -5px rgba(0, 0, 0, 0.4);
+        }
+
+        .browser-mockup {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .browser-mockup:hover {
+            border-color: rgba(59, 130, 246, 0.35);
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="h-screen w-screen flex flex-col justify-between relative bg-dark-950 antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Header -->
+    <header class="h-16 px-6 md:px-10 flex items-center justify-between z-30 border-b border-white/5 bg-dark-950/80 backdrop-blur-md">
+        <div class="flex items-center gap-3">
+            <div class="w-7 h-7 rounded-md bg-brand-600 flex items-center justify-center text-xs font-semibold text-white shadow-glow">
+                PS
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="font-semibold text-sm text-white">Product Signal</span>
+                <span class="text-xs text-slate-400 hidden sm:inline-block">/ AI UX Design Case Study</span>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <a href="https://product-signal-lake.vercel.app" target="_blank" class="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 transition-all">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Live App
+            </a>
+            <a href="https://github.com/originsatyam/product-signal" target="_blank" class="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-white/5 text-slate-300 border border-white/10 hover:bg-white/10 transition-all">
+                GitHub Repo
+            </a>
+            <button id="toggleOverviewBtn" onclick="toggleOverviewDrawer()" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 transition-all" title="View All Slides">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Presentation Area -->
+    <main class="flex-1 relative flex items-center justify-center p-6 md:p-12 overflow-hidden">
+
+        <!-- SLIDE 1: Title & Overview -->
+        <div class="slide-container active flex-col items-center justify-center text-center max-w-4xl mx-auto w-full">
+            <div class="animate-item-1 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-500/10 text-brand-400 border border-brand-500/20 text-xs font-medium mb-6">
+                🎨 AI UX Design Case Study
+            </div>
+            
+            <h1 class="animate-item-2 text-3xl sm:text-4xl md:text-5xl font-semibold text-white leading-snug mb-6">
+                Turning Scattered Customer Feedback into <span class="text-brand-400">Clearer Product Decisions</span>
+            </h1>
+
+            <p class="animate-item-3 text-slate-300 text-base md:text-lg max-w-2xl font-normal leading-relaxed mb-8">
+                An AI UX design project exploring how intelligent UI synthesis can help product managers spend less time on manual feedback analysis and more time making product decisions.
+            </p>
+
+            <div class="animate-item-4 grid grid-cols-1 sm:grid-cols-3 gap-5 w-full max-w-3xl text-left">
+                <div class="minimal-card p-5 rounded-xl">
+                    <p class="text-[11px] font-medium uppercase uppercase-tag text-slate-400 mb-1.5">1. The Problem</p>
+                    <p class="text-xs font-medium text-white leading-relaxed">PMs waste time sorting feedback before making decisions.</p>
+                </div>
+                <div class="minimal-card p-5 rounded-xl">
+                    <p class="text-[11px] font-medium uppercase uppercase-tag text-slate-400 mb-1.5">2. The Objective</p>
+                    <p class="text-xs font-medium text-white leading-relaxed">Turn scattered feedback into organized, AI-assisted insights.</p>
+                </div>
+                <div class="minimal-card p-5 rounded-xl">
+                    <p class="text-[11px] font-medium uppercase uppercase-tag text-slate-400 mb-1.5">3. UX Principle</p>
+                    <p class="text-xs font-medium text-emerald-400 leading-relaxed">AI is the assistant. The PM remains the decision maker.</p>
+                </div>
+            </div>
+
+            <div class="mt-8 text-xs text-slate-500 flex items-center gap-2">
+                <span>Press <kbd class="px-2 py-0.5 bg-white/5 rounded border border-white/10 font-mono text-slate-300">Space</kbd> or <kbd class="px-2 py-0.5 bg-white/5 rounded border border-white/10 font-mono text-slate-300">→</kbd> to navigate</span>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: 1. The Problem -->
+        <div class="slide-container flex-col max-w-5xl mx-auto w-full">
+            <div class="animate-item-1 text-rose-400 text-xs font-medium uppercase uppercase-tag mb-2">
+                1. The Problem
+            </div>
+            <h2 class="animate-item-1 text-2xl sm:text-3xl font-semibold text-white mb-6">
+                PMs Waste Time Sorting Feedback Before Making Decisions
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="space-y-6">
+                    <p class="animate-item-2 text-slate-300 text-sm leading-relaxed">
+                        Product managers receive customer feedback from different sources (Zendesk tickets, app reviews, Gong calls, and surveys). Before they can make product decisions, they often spend significant time collecting, sorting, and understanding that feedback.
+                    </p>
+
+                    <div class="animate-item-2 p-5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-200">
+                        <p class="text-xs font-medium leading-relaxed italic">
+                            "The challenge is not simply having too much feedback. It is turning that feedback into something useful for deciding what to do next."
+                        </p>
+                    </div>
+
+                    <div class="animate-item-3 space-y-3">
+                        <div class="flex items-center gap-3 text-xs text-slate-300">
+                            <span class="w-5 h-5 rounded-full bg-rose-500/20 text-rose-400 flex items-center justify-center font-medium text-[11px]">✕</span>
+                            Manual spreadsheet tagging takes hours of tedious admin labor
+                        </div>
+                        <div class="flex items-center gap-3 text-xs text-slate-300">
+                            <span class="w-5 h-5 rounded-full bg-rose-500/20 text-rose-400 flex items-center justify-center font-medium text-[11px]">✕</span>
+                            Critical customer pain points get buried across fragmented channels
+                        </div>
+                        <div class="flex items-center gap-3 text-xs text-slate-300">
+                            <span class="w-5 h-5 rounded-full bg-rose-500/20 text-rose-400 flex items-center justify-center font-medium text-[11px]">✕</span>
+                            Roadmap decisions get delayed while waiting for research synthesis
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual UX Comparison: Before vs. After -->
+                <div class="animate-item-4 minimal-card p-6 rounded-xl space-y-4">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                        <h3 class="text-xs font-medium text-slate-400 uppercase uppercase-tag">UX Bottleneck Comparison</h3>
+                        <span class="text-[10px] bg-rose-500/20 text-rose-400 px-2 py-0.5 rounded font-mono">High Friction</span>
+                    </div>
+
+                    <div class="space-y-3 text-xs">
+                        <div class="p-3.5 bg-white/5 rounded-lg border border-white/5 flex items-center justify-between">
+                            <span class="text-slate-300">Collecting Feedback from Multiple Tools</span>
+                            <span class="text-rose-400 font-medium">Scattered</span>
+                        </div>
+                        <div class="p-3.5 bg-white/5 rounded-lg border border-white/5 flex items-center justify-between">
+                            <span class="text-slate-300">Manual Sorting & Categorisation</span>
+                            <span class="text-rose-400 font-medium">Time-Consuming</span>
+                        </div>
+                        <div class="p-3.5 bg-white/5 rounded-lg border border-white/5 flex items-center justify-between">
+                            <span class="text-slate-300">Understanding Recurring Pain Points</span>
+                            <span class="text-rose-400 font-medium">High Effort</span>
+                        </div>
+                        <div class="p-3.5 bg-white/5 rounded-lg border border-white/5 flex items-center justify-between">
+                            <span class="text-slate-300">Deciding What to Prioritise</span>
+                            <span class="text-rose-400 font-medium">Delayed</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: 2. The Objective -->
+        <div class="slide-container flex-col max-w-5xl mx-auto w-full">
+            <div class="animate-item-1 text-brand-400 text-xs font-medium uppercase uppercase-tag mb-2">
+                2. The Objective
+            </div>
+            <h2 class="animate-item-1 text-2xl sm:text-3xl font-semibold text-white mb-6">
+                Help PMs Spend Less Time Sorting, More Time Deciding
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="space-y-6">
+                    <p class="animate-item-2 text-slate-300 text-sm leading-relaxed">
+                        I wanted to explore how AI could help PMs spend less time on manual feedback analysis and more time making product decisions.
+                    </p>
+
+                    <div class="animate-item-2 p-5 rounded-xl bg-brand-500/10 border border-brand-500/20 text-brand-200">
+                        <p class="text-xs font-medium leading-relaxed">
+                            "My design objective: Save PMs time by turning scattered feedback into organized, AI-generated insights that support faster prioritisation."
+                        </p>
+                    </div>
+
+                    <div class="animate-item-3 minimal-card p-5 rounded-xl space-y-2">
+                        <h4 class="text-[11px] font-medium text-emerald-400 uppercase uppercase-tag">Core UX Principle</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            The AI is not the decision maker. The PM remains responsible for deciding what to prioritise, deprioritise, or investigate further.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="animate-item-4 minimal-card p-6 rounded-xl space-y-5">
+                    <h3 class="text-xs font-semibold text-white">Assistive UX Division of Responsibilities</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-lg bg-dark-900 border border-brand-500/25">
+                            <div class="flex items-center justify-between text-xs font-medium text-brand-400 mb-1.5">
+                                <span>🤖 AI RESPONSIBILITY</span>
+                                <span class="text-[10px] text-slate-400 uppercase-tag">Assistive Analysis</span>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                Organises raw feedback, identifies recurring themes, drafts problem summaries, and links insights to source feedback.
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-lg bg-dark-900 border border-emerald-500/25">
+                            <div class="flex items-center justify-between text-xs font-medium text-emerald-400 mb-1.5">
+                                <span>👤 PM RESPONSIBILITY</span>
+                                <span class="text-[10px] text-slate-400 uppercase-tag">Strategic Ownership</span>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                Reviews source evidence, verifies insight context, and decides what to prioritise, deprioritise, or investigate.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: 3. The Solution & Core Workflow -->
+        <div class="slide-container flex-col max-w-5xl mx-auto w-full">
+            <div class="animate-item-1 text-brand-400 text-xs font-medium uppercase uppercase-tag mb-2">
+                3. The Solution & Core Workflow
+            </div>
+            <h2 class="animate-item-1 text-2xl sm:text-3xl font-semibold text-white mb-8">
+                From Messy Feedback to a Clearer Understanding
+            </h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div class="animate-item-1 minimal-card minimal-card-hover p-6 rounded-xl flex flex-col justify-between">
+                    <div>
+                        <div class="w-8 h-8 rounded-lg bg-brand-500/15 text-brand-400 font-semibold flex items-center justify-center text-xs mb-4 border border-brand-500/20">
+                            01
+                        </div>
+                        <h3 class="text-sm font-semibold text-white mb-2">Import Feedback</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            The PM uploads or imports the feedback they want to analyse.
+                        </p>
+                    </div>
+                    <span class="mt-6 text-[10px] uppercase font-medium uppercase-tag text-slate-400">Step 1</span>
+                </div>
+
+                <div class="animate-item-2 minimal-card minimal-card-hover p-6 rounded-xl flex flex-col justify-between">
+                    <div>
+                        <div class="w-8 h-8 rounded-lg bg-brand-500/15 text-brand-400 font-semibold flex items-center justify-center text-xs mb-4 border border-brand-500/20">
+                            02
+                        </div>
+                        <h3 class="text-sm font-semibold text-white mb-2">Generate Insights</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Product Signal organises feedback and generates AI insights.
+                        </p>
+                    </div>
+                    <span class="mt-6 text-[10px] uppercase font-medium uppercase-tag text-slate-400">Step 2</span>
+                </div>
+
+                <div class="animate-item-3 minimal-card minimal-card-hover p-6 rounded-xl flex flex-col justify-between">
+                    <div>
+                        <div class="w-8 h-8 rounded-lg bg-emerald-500/15 text-emerald-400 font-semibold flex items-center justify-center text-xs mb-4 border border-emerald-500/20">
+                            03
+                        </div>
+                        <h3 class="text-sm font-semibold text-white mb-2">Review Evidence</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            The PM reviews the insight and its source feedback quotes.
+                        </p>
+                    </div>
+                    <span class="mt-6 text-[10px] uppercase font-medium uppercase-tag text-emerald-400">Step 3</span>
+                </div>
+
+                <div class="animate-item-4 minimal-card minimal-card-hover p-6 rounded-xl flex flex-col justify-between">
+                    <div>
+                        <div class="w-8 h-8 rounded-lg bg-purple-500/15 text-purple-400 font-semibold flex items-center justify-center text-xs mb-4 border border-purple-500/20">
+                            04
+                        </div>
+                        <h3 class="text-sm font-semibold text-white mb-2">Make Decision</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            PM decides what to prioritise, deprioritise, or investigate further.
+                        </p>
+                    </div>
+                    <span class="mt-6 text-[10px] uppercase font-medium uppercase-tag text-purple-400">Step 4</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: 5. Main Value Screen -->
+        <div class="slide-container flex-col max-w-6xl mx-auto w-full">
+            <div class="animate-item-1 flex items-center justify-between mb-4">
+                <div>
+                    <div class="text-brand-400 text-xs font-medium uppercase uppercase-tag">5. The Screen I Would Lead With</div>
+                    <h2 class="text-2xl sm:text-3xl font-semibold text-white">AI Insights — Demonstrating Core Value</h2>
+                </div>
+                <span class="text-xs text-slate-400 bg-white/5 px-3 py-1 rounded-lg border border-white/10">Main Value Screen</span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                <!-- Browser Framing with Screenshots -->
+                <div class="animate-item-2 lg:col-span-8 rounded-xl overflow-hidden browser-mockup bg-dark-900 border border-white/10">
+                    <div class="h-8 bg-slate-900/90 px-4 flex items-center justify-between border-b border-white/10 text-[11px] text-slate-400">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-500/80"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+                        </div>
+                        <span class="bg-black/40 px-3 py-0.5 rounded text-[10px] text-slate-400 font-mono">product-signal.app/insights</span>
+                        <span>UI Showcase</span>
+                    </div>
+                    <img src="assets/ai_insights_view.png" alt="AI Insights Screen" class="w-full object-cover max-h-[380px]">
+                </div>
+
+                <div class="animate-item-3 lg:col-span-4 space-y-4">
+                    <div class="p-5 rounded-xl minimal-card space-y-2">
+                        <h4 class="text-xs font-semibold text-white">Why Lead With This Screen?</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            I would lead with the AI Insights screen because it shows how raw feedback becomes evidence-backed insights to support prioritisation.
+                        </p>
+                    </div>
+
+                    <div class="p-5 rounded-xl minimal-card space-y-2">
+                        <span class="text-[10px] font-medium text-brand-400 uppercase uppercase-tag">Core UX Data Relationship</span>
+                        <div class="text-xs font-medium text-white flex items-center gap-2">
+                            <span>Source Feedback</span> ➔ <span>AI Insight</span> ➔ <span>PM Decision</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">
+                            The insight is the processed output. The feedback is the raw material.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: 6. One Important UX Decision -->
+        <div class="slide-container flex-col max-w-6xl mx-auto w-full">
+            <div class="animate-item-1 flex items-center justify-between mb-4">
+                <div>
+                    <div class="text-brand-400 text-xs font-medium uppercase uppercase-tag">6. One Important UX Decision</div>
+                    <h2 class="text-2xl sm:text-3xl font-semibold text-white">Why I Used Cards for Insights</h2>
+                </div>
+                <span class="text-xs text-brand-400 bg-brand-500/10 px-3 py-1 rounded-lg border border-brand-500/20">UX Design Rationale</span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                <div class="animate-item-2 lg:col-span-8 rounded-xl overflow-hidden browser-mockup bg-dark-900 border border-white/10">
+                    <div class="h-8 bg-slate-900/90 px-4 flex items-center justify-between border-b border-white/10 text-[11px] text-slate-400">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-500/80"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+                        </div>
+                        <span class="bg-black/40 px-3 py-0.5 rounded text-[10px] text-slate-400 font-mono">product-signal.app/dashboard</span>
+                        <span>Card Component Architecture</span>
+                    </div>
+                    <img src="assets/overview_dashboard.png" alt="Overview Dashboard Cards" class="w-full object-cover max-h-[380px]">
+                </div>
+
+                <div class="animate-item-3 lg:col-span-4 space-y-4">
+                    <div class="p-5 rounded-xl minimal-card space-y-2">
+                        <h4 class="text-xs font-semibold text-white">Grouped Information Units</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Each insight contains multiple pieces of information (Headline, Description, Confidence, Mentions, Trend, Evidence).
+                        </p>
+                    </div>
+
+                    <div class="p-5 rounded-xl bg-brand-500/10 border border-brand-500/20 text-brand-200">
+                        <p class="text-xs font-medium leading-relaxed">
+                            "I used cards because each insight contains multiple pieces of information, and grouping them together makes the insights easier to read and scan."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: 7. How I Think About AI Accuracy -->
+        <div class="slide-container flex-col max-w-6xl mx-auto w-full">
+            <div class="animate-item-1 flex items-center justify-between mb-4">
+                <div>
+                    <div class="text-emerald-400 text-xs font-medium uppercase uppercase-tag">7. How I Think About AI Accuracy</div>
+                    <h2 class="text-2xl sm:text-3xl font-semibold text-white">Assistive AI, Not Authoritative</h2>
+                </div>
+                <span class="text-xs text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-lg border border-emerald-500/20">AI UX Principle</span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                <div class="animate-item-2 lg:col-span-8 rounded-xl overflow-hidden browser-mockup bg-dark-900 border border-white/10">
+                    <div class="h-8 bg-slate-900/90 px-4 flex items-center justify-between border-b border-white/10 text-[11px] text-slate-400">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-500/80"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+                        </div>
+                        <span class="bg-black/40 px-3 py-0.5 rounded text-[10px] text-slate-400 font-mono">product-signal.app/evidence</span>
+                        <span>Evidence Traceability UI</span>
+                    </div>
+                    <img src="assets/evidence_view.png" alt="Evidence View Traceability" class="w-full object-cover max-h-[380px]">
+                </div>
+
+                <div class="animate-item-3 lg:col-span-4 space-y-4">
+                    <div class="p-5 rounded-xl minimal-card space-y-2">
+                        <h4 class="text-xs font-semibold text-white">AI Insights Are Not Automatically Correct</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            My approach is to make the AI assistive rather than authoritative. Each insight is linked to its source feedback, so the PM can review evidence before deciding.
+                        </p>
+                    </div>
+
+                    <div class="p-5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-200">
+                        <p class="text-xs font-medium leading-relaxed">
+                            "The AI supports the insight, but the PM verifies the source feedback before deciding. This is a design choice, not a claim that the AI is perfectly accurate."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: 8. What I Would Validate -->
+        <div class="slide-container flex-col max-w-5xl mx-auto w-full">
+            <div class="animate-item-1 text-purple-400 text-xs font-medium uppercase uppercase-tag mb-2">
+                8. What I Would Validate
+            </div>
+            <h2 class="animate-item-1 text-2xl sm:text-3xl font-semibold text-white mb-6">
+                Assumption-Driven Project & Testing Plan
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="animate-item-2 minimal-card p-6 rounded-xl space-y-4">
+                    <h3 class="text-xs font-medium text-slate-400 uppercase uppercase-tag">Project Context</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        This project is assumption-driven. I have not conducted real user testing yet.
+                    </p>
+                    
+                    <div class="p-4 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-200 text-xs font-medium leading-relaxed">
+                        The most important thing I would want to test is: Does Product Signal actually save PMs time compared with their current way of analysing feedback?
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="animate-item-3 p-6 rounded-xl minimal-card space-y-3">
+                        <h4 class="text-xs font-medium text-white uppercase uppercase-tag">Validation Question</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            If a PM currently spends several hours sorting and analysing feedback, I would compare that with the time and effort required using Product Signal.
+                        </p>
+                    </div>
+
+                    <p class="animate-item-4 text-xs text-slate-400 leading-relaxed">
+                        The question is not just whether the AI generates insights. The question is whether the product creates a meaningful improvement in the PM's workflow.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: 9. What I Learned -->
+        <div class="slide-container flex-col max-w-5xl mx-auto w-full">
+            <div class="animate-item-1 text-brand-400 text-xs font-medium uppercase uppercase-tag mb-2">
+                9. What I Learned
+            </div>
+            <h2 class="animate-item-1 text-2xl sm:text-3xl font-semibold text-white mb-6">
+                Outcome First, Not Feature First
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="animate-item-2 minimal-card p-6 rounded-xl space-y-4">
+                    <h3 class="text-xs font-medium text-slate-400 uppercase uppercase-tag">Shift in Design Thinking</h3>
+                    
+                    <div class="space-y-3 text-xs">
+                        <div class="p-3 bg-white/5 rounded-lg border border-white/5 flex justify-between">
+                            <span class="text-slate-400">Feature:</span>
+                            <span class="text-white font-medium">AI Insights & Clustering</span>
+                        </div>
+                        <div class="p-3 bg-white/5 rounded-lg border border-white/5 flex justify-between">
+                            <span class="text-slate-400">Feature:</span>
+                            <span class="text-white font-medium">Source Feedback Quotes</span>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-medium leading-relaxed">
+                        🎯 THE REAL OUTCOME: Saving users time so they can make clearer product decisions.
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="animate-item-3 p-6 rounded-xl bg-brand-500/10 border border-brand-500/20 space-y-2.5">
+                        <h4 class="text-xs font-medium text-brand-300 uppercase uppercase-tag">Core Learning</h4>
+                        <p class="text-sm font-medium text-white leading-relaxed">
+                            "A feature is not valuable just because it exists. It is valuable when it helps the user achieve something important."
+                        </p>
+                    </div>
+
+                    <p class="animate-item-4 text-xs text-slate-300 leading-relaxed">
+                        AI insights are the feature. Saving PM time is the outcome. That distinction changed how I think about product design.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 10: 10. My Role and Approach -->
+        <div class="slide-container flex-col max-w-5xl mx-auto w-full">
+            <div class="animate-item-1 text-brand-400 text-xs font-medium uppercase uppercase-tag mb-2">
+                10. My Role & Approach
+            </div>
+            <h2 class="animate-item-1 text-2xl sm:text-3xl font-semibold text-white mb-6">
+                AI UX Designer — End-to-End Ownership
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="animate-item-2 minimal-card p-6 rounded-xl space-y-4">
+                    <h3 class="text-xs font-semibold text-white">Project Scope & UX Focus</h3>
+                    <ul class="space-y-2.5 text-xs text-slate-300">
+                        <li class="flex items-start gap-2 leading-relaxed">
+                            <span class="text-brand-400 font-semibold">•</span>
+                            <span>Understanding the user problem space.</span>
+                        </li>
+                        <li class="flex items-start gap-2 leading-relaxed">
+                            <span class="text-brand-400 font-semibold">•</span>
+                            <span>Defining user and business objectives.</span>
+                        </li>
+                        <li class="flex items-start gap-2 leading-relaxed">
+                            <span class="text-brand-400 font-semibold">•</span>
+                            <span>Designing the main workflow & information structure.</span>
+                        </li>
+                        <li class="flex items-start gap-2 leading-relaxed">
+                            <span class="text-brand-400 font-semibold">•</span>
+                            <span>Exploring how AI can support human decision-making.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="animate-item-3 minimal-card p-6 rounded-xl space-y-4">
+                    <h3 class="text-xs font-semibold text-white">UX Design Responsibility</h3>
+                    <div class="p-4 rounded-lg bg-dark-900 border border-brand-500/25 space-y-2">
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            I used AI to help build the working product concept, but the UX design decisions, trade-offs, and product thinking were strictly my responsibility.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 11: 11. Final Takeaway & Contact Card -->
+        <div class="slide-container flex-col items-center justify-center text-center max-w-4xl mx-auto w-full">
+            <div class="animate-item-1 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-medium mb-5">
+                🚀 Live Demo & Contact
+            </div>
+
+            <h1 class="animate-item-2 text-3xl sm:text-4xl md:text-5xl font-semibold text-white leading-snug mb-4">
+                Turn Scattered Feedback into <span class="text-brand-400">Clearer Product Decisions, Faster.</span>
+            </h1>
+
+            <p class="animate-item-3 text-slate-300 text-sm md:text-base max-w-2xl font-normal leading-relaxed mb-6">
+                Product Signal is not about replacing the PM. It is about helping the PM spend less time manually analysing feedback and more time making decisions.
+            </p>
+
+            <!-- Embedded Contact Card with Real Profile Picture -->
+            <div class="animate-item-4 w-full max-w-2xl minimal-card p-6 rounded-2xl border border-white/10 text-left mb-6 shadow-glow">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-5">
+                    <div class="flex items-center gap-4">
+                        <img src="assets/profile.jpg" alt="Satyam Manik" class="w-16 h-16 rounded-full object-cover border-2 border-brand-500/40 shadow-glow shrink-0">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-base font-semibold text-white">Satyam Manik</h3>
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-brand-500/20 text-brand-300 border border-brand-500/30">AI UX Designer</span>
+                            </div>
+                            <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+                                AI UX design project exploring intelligent feedback analysis and human-AI decision interaction.
+                            </p>
+                            <p class="text-[11px] text-emerald-400 font-medium mt-1">
+                                Available for AI UX Design Roles
+                            </p>
+                        </div>
+                    </div>
+
+                    <a href="https://www.linkedin.com/in/satyammanik" target="_blank" class="shrink-0 px-4 py-2.5 rounded-xl text-xs font-medium bg-[#0A66C2] hover:bg-[#084e96] text-white flex items-center gap-2 transition-all shadow-md">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+                        <span>Connect on LinkedIn</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="animate-item-4 flex flex-col sm:flex-row items-center gap-4">
+                <a href="https://product-signal-lake.vercel.app" target="_blank" class="w-full sm:w-auto px-7 py-3 rounded-xl font-medium bg-emerald-500 hover:bg-emerald-600 text-slate-950 transition-all shadow-glow-emerald flex items-center justify-center gap-2 text-xs">
+                    <span>Launch Live Web App</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </a>
+
+                <a href="https://github.com/originsatyam/product-signal" target="_blank" class="w-full sm:w-auto px-7 py-3 rounded-xl font-medium bg-white/10 hover:bg-white/15 text-white border border-white/15 transition-all text-xs flex items-center gap-2">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    <span>View GitHub Repository</span>
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Controls -->
+    <footer class="h-16 px-6 md:px-10 flex items-center justify-between z-30 border-t border-white/5 bg-dark-950/80 backdrop-blur-md">
+        <!-- Slide Progress Bar -->
+        <div class="absolute top-0 left-0 h-[2px] bg-brand-500 transition-all duration-300" id="progressBar" style="width: 9.09%;"></div>
+
+        <div class="flex items-center gap-2">
+            <button onclick="prevSlide()" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-all" id="prevBtn" title="Previous Slide (Left Arrow)">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            </button>
+            <button onclick="nextSlide()" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-all" id="nextBtn" title="Next Slide (Right Arrow or Space)">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </button>
+        </div>
+
+        <div class="text-xs font-medium tracking-wider text-slate-400">
+            Slide <span id="currentSlideNum" class="text-white font-semibold">1</span> of <span id="totalSlidesNum">11</span>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <button onclick="toggleFullscreen()" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 transition-all" title="Toggle Fullscreen (F)">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
+            </button>
+        </div>
+    </footer>
+
+    <!-- Overview Slide Drawer -->
+    <div id="overviewDrawer" class="fixed inset-0 z-50 bg-dark-950/95 backdrop-blur-xl hidden flex-col p-8 overflow-y-auto">
+        <div class="flex items-center justify-between mb-8 max-w-6xl mx-auto w-full">
+            <h3 class="text-xl font-semibold text-white">Slide Navigator</h3>
+            <button onclick="toggleOverviewDrawer()" class="p-2 rounded-lg bg-white/10 text-white hover:bg-white/20 transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-6xl mx-auto w-full" id="thumbnailGrid">
+            <!-- Populated via JS -->
+        </div>
+    </div>
+
+    <!-- Script Logic -->
+    <script>
+        const slides = document.querySelectorAll('.slide-container');
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+
+        const slideTitles = [
+            "AI UX Case Study Intro",
+            "1. The Problem",
+            "2. The Objective",
+            "3. Solution & Workflow",
+            "4. Main Value Screen",
+            "5. UX Decision — Cards",
+            "6. AI UX Accuracy Approach",
+            "7. Testing & Validation Plan",
+            "8. What I Learned",
+            "9. My Role & UX Scope",
+            "10. Final Takeaway & Contact"
+        ];
+
+        function updateDeck() {
+            slides.forEach((slide, idx) => {
+                if (idx === currentSlide) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+
+            document.getElementById('currentSlideNum').innerText = currentSlide + 1;
+            document.getElementById('totalSlidesNum').innerText = totalSlides;
+            document.getElementById('progressBar').style.width = `${((currentSlide + 1) / totalSlides) * 100}%`;
+
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateDeck();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateDeck();
+            }
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateDeck();
+            closeOverviewDrawer();
+        }
+
+        function toggleOverviewDrawer() {
+            const drawer = document.getElementById('overviewDrawer');
+            if (drawer.classList.contains('hidden')) {
+                buildThumbnailGrid();
+                drawer.classList.remove('hidden');
+                drawer.classList.add('flex');
+            } else {
+                closeOverviewDrawer();
+            }
+        }
+
+        function closeOverviewDrawer() {
+            const drawer = document.getElementById('overviewDrawer');
+            drawer.classList.add('hidden');
+            drawer.classList.remove('flex');
+        }
+
+        function buildThumbnailGrid() {
+            const grid = document.getElementById('thumbnailGrid');
+            grid.innerHTML = '';
+            slideTitles.forEach((title, idx) => {
+                const item = document.createElement('div');
+                item.className = `p-4 rounded-xl border text-left cursor-pointer transition-all ${
+                    idx === currentSlide 
+                        ? 'bg-brand-500/20 border-brand-500 text-white shadow-glow' 
+                        : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10'
+                }`;
+                item.onclick = () => goToSlide(idx);
+                item.innerHTML = `
+                    <div class="text-[10px] font-medium uppercase uppercase-tag text-slate-400 mb-1">Slide ${idx + 1}</div>
+                    <div class="text-xs font-semibold">${title}</div>
+                `;
+                grid.appendChild(item);
+            });
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        // Keyboard Controls
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                e.preventDefault();
+                prevSlide();
+            } else if (e.key === 'f' || e.key === 'F') {
+                toggleFullscreen();
+            } else if (e.key === 'Escape') {
+                closeOverviewDrawer();
+            }
+        });
+
+        // Initialize
+        updateDeck();
+    </script>
+</body>
+</html>
