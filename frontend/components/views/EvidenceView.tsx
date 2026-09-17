@@ -1,6 +1,22 @@
 import React, { useState } from 'react';
 import { Theme, FeedbackItem, Opportunity } from '../../types.ts';
-import { ArrowLeft, TrendingUp, Users, SplitSquareHorizontal, Plus, CheckCircle2, Sparkles, MessageSquareQuote } from 'lucide-react';
+import { 
+  ArrowLeft, 
+  TrendingUp, 
+  Users, 
+  SplitSquareHorizontal, 
+  Plus, 
+  CheckCircle2, 
+  Sparkles, 
+  MessageSquareQuote,
+  Camera,
+  Code2,
+  ExternalLink,
+  Copy,
+  Check,
+  Maximize2,
+  AlertCircle
+} from 'lucide-react';
 
 interface EvidenceViewProps {
   theme: Theme;
@@ -17,11 +33,31 @@ export const EvidenceView: React.FC<EvidenceViewProps> = ({
   onCreateOpportunity,
   existingOpportunity
 }) => {
+  const [activeTab, setActiveTab] = useState<'quotes' | 'visual'>('quotes');
   const [showSplitConfirm, setShowSplitConfirm] = useState(false);
+  const [copiedSelector, setCopiedSelector] = useState(false);
+  const [hotspotActive, setHotspotActive] = useState(true);
 
   const handleSplitTheme = () => {
     setShowSplitConfirm(true);
     setTimeout(() => setShowSplitConfirm(false), 4000);
+  };
+
+  const handleCopySelector = (selector: string) => {
+    navigator.clipboard.writeText(selector);
+    setCopiedSelector(true);
+    setTimeout(() => setCopiedSelector(false), 2000);
+  };
+
+  const trace = theme.visualTrace || {
+    route: '/app/workflow-execution',
+    component: 'WorkspaceActionModal.tsx',
+    viewport: '1280x800 (Desktop)',
+    frictionZone: 'Interactive Form & Action Dropdown',
+    domSelector: '#workspace-action-container [data-testid="primary-action"]',
+    severity: 'High',
+    capturedAt: 'Auto-captured 18 mins ago via Playwright Headless',
+    tracePreviewDescription: 'User interaction telemetry detected high rage-clicks and drop-off on this element container.'
   };
 
   return (
@@ -72,15 +108,37 @@ export const EvidenceView: React.FC<EvidenceViewProps> = ({
         </div>
       </div>
 
-      {/* Evidence Section */}
-      <div className="mb-4 md:mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-        <div>
-          <h3 className="text-lg font-semibold text-slate-900">Supporting Evidence</h3>
-          <p className="text-sm text-slate-500 mt-1">Raw feedback items clustered into this theme.</p>
+      {/* Multimodal Evidence Mode Switcher */}
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+        <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-lg">
+          <button
+            onClick={() => setActiveTab('quotes')}
+            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-md text-sm font-medium transition-all ${
+              activeTab === 'quotes'
+                ? 'bg-white text-slate-900 shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <MessageSquareQuote className="w-4 h-4" />
+            Customer Quotes ({feedbackItems.length})
+          </button>
+          <button
+            onClick={() => setActiveTab('visual')}
+            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-md text-sm font-medium transition-all ${
+              activeTab === 'visual'
+                ? 'bg-white text-slate-900 shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <Camera className="w-4 h-4 text-primary-600" />
+            Playwright Visual Trace
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          </button>
         </div>
+
         <button 
           onClick={handleSplitTheme}
-          className="text-sm font-medium text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 px-3 py-2 sm:py-1.5 bg-white border border-slate-200 rounded-md hover:bg-slate-50 transition-colors focus-ring shadow-xs w-full sm:w-auto"
+          className="text-sm font-medium text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-md hover:bg-slate-50 transition-colors focus-ring shadow-xs"
           title="If AI grouped unrelated feedback, split them here."
         >
           <SplitSquareHorizontal className="w-4 h-4" />
@@ -98,27 +156,128 @@ export const EvidenceView: React.FC<EvidenceViewProps> = ({
         </div>
       )}
 
-      <div className="space-y-3 mb-8 md:mb-10">
-        {feedbackItems.map((item) => (
-          <div key={item.id} className="card p-4 md:p-5 flex gap-3 md:gap-4 group">
-            <div className="mt-0.5 flex-shrink-0">
-              <MessageSquareQuote className="w-5 h-5 text-slate-300 group-hover:text-slate-400 transition-colors" />
+      {/* Tab Content 1: Customer Quotes */}
+      {activeTab === 'quotes' && (
+        <div className="space-y-3 mb-8 md:mb-10 animate-in fade-in duration-200">
+          {feedbackItems.map((item) => (
+            <div key={item.id} className="card p-4 md:p-5 flex gap-3 md:gap-4 group">
+              <div className="mt-0.5 flex-shrink-0">
+                <MessageSquareQuote className="w-5 h-5 text-slate-300 group-hover:text-slate-400 transition-colors" />
+              </div>
+              <div>
+                <p className="text-slate-800 text-sm leading-relaxed mb-3">"{item.text}"</p>
+                <div className="flex flex-wrap items-center gap-2 md:gap-3 text-xs font-medium">
+                  <span className="bg-slate-100 text-slate-600 px-2 py-1 rounded border border-slate-200">{item.source}</span>
+                  <span className="text-slate-400">{item.date}</span>
+                </div>
+              </div>
             </div>
-            <div>
-              <p className="text-slate-800 text-sm leading-relaxed mb-3">"{item.text}"</p>
-              <div className="flex flex-wrap items-center gap-2 md:gap-3 text-xs font-medium">
-                <span className="bg-slate-100 text-slate-600 px-2 py-1 rounded border border-slate-200">{item.source}</span>
-                <span className="text-slate-400">{item.date}</span>
+          ))}
+          <div className="text-center pt-4">
+            <button className="text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors focus-ring rounded px-2 py-1">
+              View all {theme.mentions} sources
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Tab Content 2: Visual UI Trace (Playwright Integration) */}
+      {activeTab === 'visual' && (
+        <div className="mb-8 md:mb-10 space-y-4 animate-in fade-in duration-200">
+          {/* Metadata telemetry bar */}
+          <div className="card p-4 bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="bg-slate-900 text-white font-mono px-2.5 py-1 rounded">
+                Playwright v1.40
+              </span>
+              <span className="bg-white border border-slate-200 text-slate-700 font-mono px-2.5 py-1 rounded">
+                Route: {trace.route}
+              </span>
+              <span className="bg-white border border-slate-200 text-slate-700 px-2.5 py-1 rounded">
+                {trace.viewport}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1 bg-rose-50 text-rose-700 border border-rose-200 px-2.5 py-1 rounded font-medium">
+                <AlertCircle className="w-3.5 h-3.5 text-rose-600" />
+                {trace.severity} UI Friction
+              </span>
+              <span className="text-slate-500 text-[11px]">{trace.capturedAt}</span>
+            </div>
+          </div>
+
+          {/* Browser Mockup Window with Visual Overlay */}
+          <div className="border border-slate-300 rounded-xl overflow-hidden shadow-sm bg-white">
+            {/* Window header */}
+            <div className="bg-slate-100 border-b border-slate-200 px-4 py-2.5 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-3 rounded-full bg-rose-400 inline-block"></span>
+                <span className="w-3 h-3 rounded-full bg-amber-400 inline-block"></span>
+                <span className="w-3 h-3 rounded-full bg-emerald-400 inline-block"></span>
+              </div>
+              <div className="bg-white border border-slate-200 rounded-md px-4 py-1 text-xs text-slate-600 font-mono w-72 max-w-full text-center truncate">
+                https://app.productsignal.io{trace.route}
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setHotspotActive(!hotspotActive)}
+                  className={`text-xs px-2 py-1 rounded font-medium border transition-colors ${
+                    hotspotActive 
+                      ? 'bg-primary-50 text-primary-700 border-primary-200' 
+                      : 'bg-white text-slate-600 border-slate-200'
+                  }`}
+                >
+                  {hotspotActive ? 'Friction Zone: ON' : 'Friction Zone: OFF'}
+                </button>
+              </div>
+            </div>
+
+            {/* Browser canvas body */}
+            <div className="p-6 md:p-8 bg-slate-900/5 min-h-[300px] relative flex flex-col justify-center items-center">
+              <div className="w-full max-w-2xl bg-white border border-slate-200 rounded-lg p-6 shadow-sm relative">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                  <div className="flex items-center gap-2">
+                    <Code2 className="w-4 h-4 text-primary-600" />
+                    <span className="text-xs font-semibold text-slate-800 font-mono">{trace.component}</span>
+                  </div>
+                  <span className="text-xs text-slate-400">Target: {trace.frictionZone}</span>
+                </div>
+
+                <div className="space-y-3">
+                  <p className="text-sm text-slate-700 leading-relaxed">
+                    {trace.tracePreviewDescription}
+                  </p>
+
+                  <div className="bg-slate-900 text-slate-200 p-3 rounded-md font-mono text-xs overflow-x-auto flex items-center justify-between gap-4">
+                    <code>{trace.domSelector}</code>
+                    <button
+                      onClick={() => handleCopySelector(trace.domSelector)}
+                      className="text-slate-400 hover:text-white flex items-center gap-1 transition-colors flex-shrink-0"
+                    >
+                      {copiedSelector ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                      {copiedSelector ? 'Copied' : 'Copy'}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Pulsing Hotspot Overlay */}
+                {hotspotActive && (
+                  <div className="mt-4 p-3 bg-rose-50 border border-rose-200 rounded-md flex items-start gap-2.5">
+                    <span className="relative flex h-3 w-3 mt-1 flex-shrink-0">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-rose-500"></span>
+                    </span>
+                    <div className="text-xs text-rose-900">
+                      <span className="font-semibold block mb-0.5">Automated Heuristic Triggered</span>
+                      <span>Playwright recorded repetitive click attempts on this selector matching <strong>{theme.mentions} user quotes</strong>.</span>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
-        ))}
-        <div className="text-center pt-4">
-          <button className="text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors focus-ring rounded px-2 py-1">
-            View all {theme.mentions} sources
-          </button>
         </div>
-      </div>
+      )}
 
       {/* Action Section */}
       <div className="card p-5 md:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50">

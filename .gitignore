@@ -13,6 +13,8 @@ backend/.env.local
 frontend/.env.local
 .agents/
 figma mcp.json
+ask.md
+chat.md
 
 # Production Build Outputs
 dist/

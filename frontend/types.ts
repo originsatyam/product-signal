@@ -5,6 +5,17 @@ export interface FeedbackItem {
   date: string;
 }
 
+export interface VisualTrace {
+  route: string;
+  component: string;
+  viewport: string;
+  frictionZone: string;
+  domSelector: string;
+  severity: 'High' | 'Medium' | 'Low';
+  capturedAt: string;
+  tracePreviewDescription: string;
+}
+
 export interface Theme {
   id: string;
   title: string;
@@ -16,6 +27,7 @@ export interface Theme {
   affectedSegment: string;
   feedbackIds: string[];
   isEmerging?: boolean;
+  visualTrace?: VisualTrace;
 }
 
 export interface Opportunity {

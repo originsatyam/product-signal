@@ -25,6 +25,16 @@ export const mockThemes: Theme[] = [
     affectedSegment: 'New SMB & Enterprise Teams',
     feedbackIds: ['f1', 'f2', 'f3', 'f4'],
     isEmerging: true,
+    visualTrace: {
+      route: '/app/settings/team-permissions',
+      component: 'WorkspaceRoleMatrixModal.tsx',
+      viewport: '1280x800 (Desktop)',
+      frictionZone: 'Role Matrix Dropdown & Expiration Stepper',
+      domSelector: '#workspace-invite-modal [data-testid="role-selector"]',
+      severity: 'High',
+      capturedAt: 'Auto-captured 14 mins ago via Playwright Headless',
+      tracePreviewDescription: 'User cursor stalled for 42s attempting to locate external member role presets before triggering modal dismiss.'
+    }
   },
   {
     id: 't2',
@@ -36,6 +46,16 @@ export const mockThemes: Theme[] = [
     mentions: 35,
     affectedSegment: 'Executive & Enterprise Users',
     feedbackIds: ['f5', 'f6', 'f7'],
+    visualTrace: {
+      route: '/analytics/reports/executive-summary',
+      component: 'ReportExportActionGroup.tsx',
+      viewport: '1440x900 (Desktop)',
+      frictionZone: 'Canvas SVG Render & Print Media Container',
+      domSelector: '.analytics-chart-container canvas.recharts-surface',
+      severity: 'High',
+      capturedAt: 'Auto-captured 1 hour ago via Playwright Headless',
+      tracePreviewDescription: 'DOM element clip-path failed on print-media rendering, truncating legend labels and wrapping table cells.'
+    }
   },
   {
     id: 't3',
@@ -47,6 +67,16 @@ export const mockThemes: Theme[] = [
     mentions: 28,
     affectedSegment: 'Power & Analytics Users',
     feedbackIds: ['f8', 'f9'],
+    visualTrace: {
+      route: '/feedback/all-items?limit=10000',
+      component: 'FeedbackVirtualTable.tsx',
+      viewport: '1920x1080 (Desktop)',
+      frictionZone: 'Client-side In-memory Filter Pipeline',
+      domSelector: '#feedback-data-grid [role="rowgroup"]',
+      severity: 'Medium',
+      capturedAt: 'Auto-captured 3 hours ago via Playwright Headless',
+      tracePreviewDescription: 'Long task blocked UI thread for 2,410ms during multifaceted tag filtering operations.'
+    }
   },
   {
     id: 't4',
@@ -58,6 +88,16 @@ export const mockThemes: Theme[] = [
     mentions: 19,
     affectedSegment: 'Developers & Technical Leads',
     feedbackIds: ['f10'],
+    visualTrace: {
+      route: '/developer/webhooks/test-payload',
+      component: 'WebhookPayloadInspector.tsx',
+      viewport: '1280x800 (Desktop)',
+      frictionZone: 'API Validation Error Banner & Response Inspector',
+      domSelector: '.error-banner-container pre.code-block',
+      severity: 'Medium',
+      capturedAt: 'Auto-captured 5 hours ago via Playwright Headless',
+      tracePreviewDescription: 'Generic 400 Bad Request returned without schema validation diff or missing parameter list.'
+    }
   }
 ];
 

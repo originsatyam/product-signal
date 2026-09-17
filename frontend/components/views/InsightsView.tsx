@@ -49,6 +49,12 @@ export const InsightsView: React.FC<InsightsViewProps> = ({ themes, onViewTheme 
                   <Users className="w-4 h-4 text-slate-400" />
                   {theme.affectedSegment}
                 </div>
+                {theme.visualTrace && (
+                  <div className="flex items-center gap-1.5 text-xs text-primary-700 bg-primary-50 border border-primary-100 px-2 py-0.5 rounded">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    <span>Visual Trace Attached</span>
+                  </div>
+                )}
               </div>
             </div>
             
